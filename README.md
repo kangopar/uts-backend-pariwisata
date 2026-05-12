@@ -20,7 +20,7 @@ Backend REST API untuk aplikasi pariwisata menggunakan **Express JS** dan **MySQ
 ```
 uts-backend/
 ├── app.js                    # Entry point server
-├── .env                      # Konfigurasi environment
+├── .env                      # Konfigurasi environment (tidak di-commit)
 ├── .env.example              # Template konfigurasi
 ├── package.json
 ├── config/
@@ -33,8 +33,11 @@ uts-backend/
 │   ├── kategoriRoutes.js
 │   ├── wisataRoutes.js
 │   └── ulasanRoutes.js
-└── database/
-    └── migration.sql         # Script pembuatan tabel + data sample
+├── database/
+│   └── migration.sql         # Script pembuatan tabel + data sample
+└── postman/
+    ├── UTS_Pariwisata.postman_collection.json
+    └── UTS_Pariwisata.postman_environment.json
 ```
 
 ---
@@ -226,3 +229,70 @@ Server berjalan di **http://localhost:3000**
   "message": "Wisata tidak ditemukan"
 }
 ```
+
+---
+
+## Testing dengan Postman
+
+File Postman tersedia di folder `postman/`:
+
+| File | Keterangan |
+|------|------------|
+| `UTS_Pariwisata.postman_collection.json` | Koleksi 16 request (CRUD semua resource) |
+| `UTS_Pariwisata.postman_environment.json` | Environment variable (base_url, id dinamis) |
+
+### Cara Import
+
+1. Buka **Postman** → klik tombol **Import** (pojok kiri atas)
+2. Import file environment terlebih dahulu:
+   - Pilih file `postman/UTS_Pariwisata.postman_environment.json`
+3. Import file collection:
+   - Pilih file `postman/UTS_Pariwisata.postman_collection.json`
+4. Pilih environment **"UTS Pariwisata - Local"** di dropdown pojok kanan atas Postman
+5. Pastikan server sudah berjalan (`npm run dev`), lalu kirim request
+
+### Environment Variables
+
+| Variable | Default Value | Keterangan |
+|----------|---------------|------------|
+| `base_url` | `http://localhost:3000` | Base URL server |
+| `kategori_id` | `1` | ID kategori aktif (auto-update setelah POST) |
+| `wisata_id` | `1` | ID wisata aktif (auto-update setelah POST) |
+| `ulasan_id` | `1` | ID ulasan aktif (auto-update setelah POST) |
+
+### Daftar Request dalam Collection
+
+#### 📁 Root
+| Method | Endpoint | Deskripsi |
+|--------|----------|-----------|
+| GET | `/` | Cek server & lihat daftar endpoint |
+
+#### 📁 Kategori
+| Method | Endpoint | Deskripsi |
+|--------|----------|-----------|
+| GET | `/api/kategori` | Ambil semua kategori |
+| GET | `/api/kategori/{{kategori_id}}` | Ambil kategori by ID |
+| POST | `/api/kategori` | Tambah kategori baru |
+| PUT | `/api/kategori/{{kategori_id}}` | Update kategori |
+| DELETE | `/api/kategori/{{kategori_id}}` | Hapus kategori |
+
+#### 📁 Wisata
+| Method | Endpoint | Deskripsi |
+|--------|----------|-----------|
+| GET | `/api/wisata` | Ambil semua wisata (join kategori) |
+| GET | `/api/wisata/{{wisata_id}}` | Detail wisata + ulasan |
+| POST | `/api/wisata` | Tambah wisata baru |
+| PUT | `/api/wisata/{{wisata_id}}` | Update wisata |
+| DELETE | `/api/wisata/{{wisata_id}}` | Hapus wisata |
+
+#### 📁 Ulasan
+| Method | Endpoint | Deskripsi |
+|--------|----------|-----------|
+| GET | `/api/ulasan` | Ambil semua ulasan (join wisata) |
+| GET | `/api/ulasan/{{ulasan_id}}` | Detail ulasan by ID |
+| GET | `/api/ulasan/wisata/{{wisata_id}}` | Filter ulasan by wisata |
+| POST | `/api/ulasan` | Tambah ulasan baru |
+| PUT | `/api/ulasan/{{ulasan_id}}` | Update ulasan |
+| DELETE | `/api/ulasan/{{ulasan_id}}` | Hapus ulasan |
+
+> **Tip:** Setiap request **POST** memiliki test script yang otomatis menyimpan ID hasil insert ke variable environment, sehingga request GET/PUT/DELETE selanjutnya langsung menggunakan ID tersebut tanpa perlu mengubah manual.
