@@ -1,0 +1,584 @@
+{
+  "info": {
+    "_postman_id": "uts-pariwisata-collection",
+    "name": "UTS Backend - REST API Pariwisata",
+    "description": "Koleksi endpoint REST API Aplikasi Pariwisata\n\n**Base URL:** `{{base_url}}`\n\n**Tabel:** kategori, wisata, ulasan\n\n**Cara pakai:**\n1. Import environment `UTS_Pariwisata.postman_environment.json`\n2. Pilih environment **UTS Pariwisata - Local**\n3. Jalankan request sesuai urutan folder",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Root",
+      "item": [
+        {
+          "name": "Welcome",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": ["{{base_url}}"],
+              "path": [""]
+            },
+            "description": "Cek server berjalan dan lihat daftar endpoint"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Kategori",
+      "item": [
+        {
+          "name": "GET Semua Kategori",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/kategori",
+              "host": ["{{base_url}}"],
+              "path": ["api", "kategori"]
+            },
+            "description": "Ambil seluruh data kategori wisata"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{base_url}}/api/kategori" }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Data kategori berhasil diambil\",\n  \"data\": [\n    { \"id\": 1, \"nama\": \"Alam\", \"deskripsi\": \"Destinasi wisata alam terbuka\", \"created_at\": \"...\", \"updated_at\": \"...\" },\n    { \"id\": 2, \"nama\": \"Budaya\", \"deskripsi\": \"Destinasi wisata berbasis budaya\", \"created_at\": \"...\", \"updated_at\": \"...\" }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET Kategori by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/kategori/{{kategori_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "kategori", "{{kategori_id}}"]
+            },
+            "description": "Ambil satu kategori berdasarkan ID"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{base_url}}/api/kategori/1" }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Data kategori berhasil diambil\",\n  \"data\": { \"id\": 1, \"nama\": \"Alam\", \"deskripsi\": \"Destinasi wisata alam terbuka\", \"created_at\": \"...\", \"updated_at\": \"...\" }\n}"
+            },
+            {
+              "name": "404 Not Found",
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{base_url}}/api/kategori/999" }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": false,\n  \"message\": \"Kategori tidak ditemukan\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST Tambah Kategori",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.success && res.data) {",
+                  "  pm.environment.set('kategori_id', res.data.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama\": \"Petualangan\",\n  \"deskripsi\": \"Wisata petualangan dan olahraga ekstrem\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/kategori",
+              "host": ["{{base_url}}"],
+              "path": ["api", "kategori"]
+            },
+            "description": "Tambah kategori baru. Script otomatis menyimpan `kategori_id` ke environment."
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": {
+                "method": "POST",
+                "url": { "raw": "{{base_url}}/api/kategori" }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Kategori berhasil ditambahkan\",\n  \"data\": { \"id\": 4, \"nama\": \"Petualangan\", \"deskripsi\": \"Wisata petualangan dan olahraga ekstrem\", \"created_at\": \"...\", \"updated_at\": \"...\" }\n}"
+            }
+          ]
+        },
+        {
+          "name": "PUT Update Kategori",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama\": \"Petualangan & Olahraga\",\n  \"deskripsi\": \"Wisata petualangan, hiking, arung jeram, dan olahraga ekstrem\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/kategori/{{kategori_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "kategori", "{{kategori_id}}"]
+            },
+            "description": "Update data kategori berdasarkan ID"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "PUT",
+                "url": { "raw": "{{base_url}}/api/kategori/4" }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Kategori berhasil diperbarui\",\n  \"data\": { \"id\": 4, \"nama\": \"Petualangan & Olahraga\", \"deskripsi\": \"...\", \"created_at\": \"...\", \"updated_at\": \"...\" }\n}"
+            }
+          ]
+        },
+        {
+          "name": "DELETE Kategori",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/kategori/{{kategori_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "kategori", "{{kategori_id}}"]
+            },
+            "description": "Hapus kategori berdasarkan ID"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "DELETE",
+                "url": { "raw": "{{base_url}}/api/kategori/4" }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Kategori berhasil dihapus\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Wisata",
+      "item": [
+        {
+          "name": "GET Semua Wisata",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/wisata",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wisata"]
+            },
+            "description": "Ambil seluruh data wisata beserta nama kategori (LEFT JOIN)"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{base_url}}/api/wisata" }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Data wisata berhasil diambil\",\n  \"total\": 5,\n  \"data\": [\n    {\n      \"id\": 1,\n      \"nama\": \"Pantai Kuta\",\n      \"deskripsi\": \"Pantai populer dengan sunset yang indah\",\n      \"lokasi\": \"Kuta, Bali\",\n      \"harga_tiket\": \"20000.00\",\n      \"gambar\": \"pantai_kuta.jpg\",\n      \"kategori_id\": 1,\n      \"kategori_nama\": \"Alam\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET Wisata by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/wisata/{{wisata_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wisata", "{{wisata_id}}"]
+            },
+            "description": "Detail wisata beserta semua ulasan yang terkait"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{base_url}}/api/wisata/1" }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Detail wisata berhasil diambil\",\n  \"data\": {\n    \"id\": 1,\n    \"nama\": \"Pantai Kuta\",\n    \"lokasi\": \"Kuta, Bali\",\n    \"harga_tiket\": \"20000.00\",\n    \"kategori_id\": 1,\n    \"kategori_nama\": \"Alam\",\n    \"ulasan\": [\n      { \"id\": 1, \"nama_pengunjung\": \"Andi Saputra\", \"rating\": 5, \"komentar\": \"Pantainya sangat indah!\" }\n    ]\n  }\n}"
+            },
+            {
+              "name": "404 Not Found",
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{base_url}}/api/wisata/999" }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": false,\n  \"message\": \"Wisata tidak ditemukan\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST Tambah Wisata",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.success && res.data) {",
+                  "  pm.environment.set('wisata_id', res.data.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama\": \"Gunung Bromo\",\n  \"deskripsi\": \"Gunung berapi aktif dengan pemandangan sunrise yang spektakuler\",\n  \"lokasi\": \"Probolinggo, Jawa Timur\",\n  \"harga_tiket\": 35000,\n  \"id_kategori\": 1,\n  \"gambar\": \"gunung_bromo.jpg\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/wisata",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wisata"]
+            },
+            "description": "Tambah data wisata baru. Script otomatis menyimpan `wisata_id` ke environment."
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": {
+                "method": "POST",
+                "url": { "raw": "{{base_url}}/api/wisata" }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Wisata berhasil ditambahkan\",\n  \"data\": {\n    \"id\": 6,\n    \"nama\": \"Gunung Bromo\",\n    \"lokasi\": \"Probolinggo, Jawa Timur\",\n    \"harga_tiket\": \"35000.00\",\n    \"kategori_nama\": \"Alam\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "PUT Update Wisata",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama\": \"Gunung Bromo\",\n  \"deskripsi\": \"Gunung berapi aktif dengan sunrise spektakuler dan lautan pasir\",\n  \"lokasi\": \"Probolinggo, Jawa Timur\",\n  \"harga_tiket\": 40000,\n  \"id_kategori\": 1,\n  \"gambar\": \"gunung_bromo_updated.jpg\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/wisata/{{wisata_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wisata", "{{wisata_id}}"]
+            },
+            "description": "Update data wisata berdasarkan ID"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "PUT",
+                "url": { "raw": "{{base_url}}/api/wisata/6" }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Wisata berhasil diperbarui\",\n  \"data\": { \"id\": 6, \"nama\": \"Gunung Bromo\", \"harga_tiket\": \"40000.00\", \"kategori_nama\": \"Alam\" }\n}"
+            }
+          ]
+        },
+        {
+          "name": "DELETE Wisata",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/wisata/{{wisata_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wisata", "{{wisata_id}}"]
+            },
+            "description": "Hapus data wisata berdasarkan ID (ulasan terkait ikut terhapus - CASCADE)"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "DELETE",
+                "url": { "raw": "{{base_url}}/api/wisata/6" }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Wisata berhasil dihapus\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Ulasan",
+      "item": [
+        {
+          "name": "GET Semua Ulasan",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/ulasan",
+              "host": ["{{base_url}}"],
+              "path": ["api", "ulasan"]
+            },
+            "description": "Ambil seluruh ulasan beserta nama wisata (JOIN)"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{base_url}}/api/ulasan" }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Data ulasan berhasil diambil\",\n  \"total\": 6,\n  \"data\": [\n    {\n      \"id\": 1,\n      \"nama_pengunjung\": \"Andi Saputra\",\n      \"rating\": 5,\n      \"komentar\": \"Pantainya sangat indah!\",\n      \"tanggal_kunjungan\": \"2026-01-10\",\n      \"wisata_id\": 1,\n      \"wisata_nama\": \"Pantai Kuta\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET Ulasan by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/ulasan/{{ulasan_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "ulasan", "{{ulasan_id}}"]
+            },
+            "description": "Ambil satu ulasan berdasarkan ID"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{base_url}}/api/ulasan/1" }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Data ulasan berhasil diambil\",\n  \"data\": {\n    \"id\": 1,\n    \"nama_pengunjung\": \"Andi Saputra\",\n    \"rating\": 5,\n    \"komentar\": \"Pantainya sangat indah!\",\n    \"wisata_id\": 1,\n    \"wisata_nama\": \"Pantai Kuta\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET Ulasan by Wisata",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/ulasan/wisata/{{wisata_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "ulasan", "wisata", "{{wisata_id}}"]
+            },
+            "description": "Filter ulasan berdasarkan ID wisata tertentu"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{base_url}}/api/ulasan/wisata/1" }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Ulasan untuk wisata \\\"Pantai Kuta\\\"\",\n  \"total\": 2,\n  \"data\": [\n    { \"id\": 1, \"nama_pengunjung\": \"Andi Saputra\", \"rating\": 5, \"komentar\": \"Sangat indah!\" },\n    { \"id\": 2, \"nama_pengunjung\": \"Rina Lestari\", \"rating\": 4, \"komentar\": \"Wajib dikunjungi.\" }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST Tambah Ulasan",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.success && res.data) {",
+                  "  pm.environment.set('ulasan_id', res.data.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_wisata\": 1,\n  \"nama_pengunjung\": \"Budi Doremi\",\n  \"rating\": 4,\n  \"komentar\": \"Pemandangannya indah tapi agak ramai\",\n  \"tanggal_kunjungan\": \"2026-05-10\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/ulasan",
+              "host": ["{{base_url}}"],
+              "path": ["api", "ulasan"]
+            },
+            "description": "Tambah ulasan baru. Rating wajib 1–5. Script otomatis menyimpan `ulasan_id`."
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": {
+                "method": "POST",
+                "url": { "raw": "{{base_url}}/api/ulasan" }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Ulasan berhasil ditambahkan\",\n  \"data\": {\n    \"id\": 7,\n    \"id_wisata\": 1,\n    \"nama_pengunjung\": \"Budi Doremi\",\n    \"rating\": 4,\n    \"wisata_nama\": \"Pantai Kuta\"\n  }\n}"
+            },
+            {
+              "name": "400 Bad Request - Rating Invalid",
+              "originalRequest": {
+                "method": "POST",
+                "url": { "raw": "{{base_url}}/api/ulasan" }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": false,\n  \"message\": \"Rating harus antara 1 sampai 5\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "PUT Update Ulasan",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama_pengunjung\": \"Budi Doremi\",\n  \"rating\": 5,\n  \"komentar\": \"Setelah berkunjung lagi, makin suka! Recommended!\",\n  \"tanggal_kunjungan\": \"2026-05-11\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/ulasan/{{ulasan_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "ulasan", "{{ulasan_id}}"]
+            },
+            "description": "Update ulasan berdasarkan ID"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "PUT",
+                "url": { "raw": "{{base_url}}/api/ulasan/7" }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Ulasan berhasil diperbarui\",\n  \"data\": { \"id\": 7, \"nama_pengunjung\": \"Budi Doremi\", \"rating\": 5, \"wisata_nama\": \"Pantai Kuta\" }\n}"
+            }
+          ]
+        },
+        {
+          "name": "DELETE Ulasan",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/ulasan/{{ulasan_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "ulasan", "{{ulasan_id}}"]
+            },
+            "description": "Hapus ulasan berdasarkan ID"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "DELETE",
+                "url": { "raw": "{{base_url}}/api/ulasan/7" }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Ulasan berhasil dihapus\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ]
+}
